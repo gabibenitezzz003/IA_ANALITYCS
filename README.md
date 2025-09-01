@@ -31,7 +31,6 @@ visualizaciones, persistencia y la interfaz. Puntos clave:
 - `sistema_analitico/interfaz_app.py`: Streamlit app para interacción y dashboards.
 
 Ejecutar tests
---------------
 Instale dependencias y luego:
 
    pip install -r requirements.txt
@@ -39,7 +38,6 @@ Instale dependencias y luego:
    pytest -q
 
 Ejecutar con Docker (recomendado para pruebas locales)
------------------------------------------------
 
 1) Construir y ejecutar con docker-compose:
 
@@ -58,11 +56,10 @@ Persistencia local (artifacts):
 
    El volumen `./artifacts` se monta dentro del contenedor en `/app/artifacts`.
 
-CI / Publicación de imagen:
+CI / Integración continua:
 
  - El workflow de GitHub Actions en `.github/workflows/ci.yml` ejecuta tests y,
-   en la rama `main`, construye y publica la imagen a Docker Hub si existen los
-   secretos `DOCKERHUB_USERNAME` y `DOCKERHUB_TOKEN` en el repositorio.
+   No se publica la imagen en Docker Hub desde este repositorio.
 
 Notas de seguridad y producción:
 

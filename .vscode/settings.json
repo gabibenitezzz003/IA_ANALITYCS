@@ -1,0 +1,13 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}",
+    "${workspaceFolder}/sistema_analitico"
+  ],
+  "python.analysis.typeCheckingMode": "basic"
+  ,
+  // Reduce noisy YAML/GitHub Actions diagnostics in the Problems panel for this workspace
+  "yaml.schemaStore.enable": false,
+  "yaml.validate": false
+}
+
