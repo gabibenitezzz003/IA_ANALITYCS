@@ -1,0 +1,28 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  # NOTE: Streamlit serves HTML and doesn't expose Prometheus metrics at /metrics.
+  # We rely on the `blackbox` job below to probe HTTP endpoints instead of scraping them.
+
+  - job_name: 'blackbox'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets: ['caddy:80', 'sistema_analitico:8501']
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: '(.*)'
+        target_label: '__param_target'
+        replacement: 'http://$1/'
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: '__address__'
+        replacement: 'blackbox:9115'
+
+  - job_name: 'sistema_analitico_metrics'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['metrics:8000']

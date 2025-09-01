@@ -5,6 +5,7 @@ disponible, o Matplotlib como respaldo. Nombres y variables en español.
 """
 from typing import Optional
 import numpy as np
+from sklearn.decomposition import PCA
 
 
 def grafico_series_temporales(x, y, titulo: str = "Serie temporal"):
@@ -37,5 +38,31 @@ class VisualizadorInteractivo:
                     fig.write_html('salida_serie.html')
                 else:
                     fig.savefig('salida_serie.png')
+            except Exception:
+                pass
+
+    def mostrar_proyector_embeddings(self, embeddings: np.ndarray, etiquetas=None, titulo: str = 'Embeddings'):
+        try:
+            import plotly.express as px
+            pca = PCA(n_components=2)
+            coords = pca.fit_transform(embeddings)
+            df = {'x': coords[:, 0], 'y': coords[:, 1]}
+            if etiquetas is not None:
+                df['label'] = etiquetas
+            fig = px.scatter(df, x='x', y='y', color='label' if 'label' in df else None, title=titulo)
+            try:
+                import streamlit as st
+                st.plotly_chart(fig)
+            except Exception:
+                fig.write_html('embeddings_proyector.html')
+        except Exception:
+            # Fallback matplotlib
+            try:
+                import matplotlib.pyplot as plt
+                pca = PCA(n_components=2)
+                coords = pca.fit_transform(embeddings)
+                fig, ax = plt.subplots()
+                ax.scatter(coords[:, 0], coords[:, 1])
+                fig.savefig('embeddings_proyector.png')
             except Exception:
                 pass

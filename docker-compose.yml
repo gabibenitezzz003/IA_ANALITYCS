@@ -1,0 +1,53 @@
+version: '3.8'
+services:
+  sistema_analitico:
+    image: sistema-analitico:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./artifacts:/app/artifacts
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
+  caddy:
+    image: caddy:2
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+    depends_on:
+      - sistema_analitico
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+  metrics:
+    image: sistema-analitico:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: ["python", "-u"]
+    command: ["sistema_analitico/metrics_server.py"]
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    depends_on:
+      - sistema_analitico
+  blackbox:
+    image: prom/blackbox-exporter:latest
+    ports:
+      - "9115:9115"
+    restart: unless-stopped
+volumes:
+  caddy_data:
+  caddy_config:

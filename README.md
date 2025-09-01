@@ -38,3 +38,35 @@ Instale dependencias y luego:
    pip install pytest
    pytest -q
 
+Ejecutar con Docker (recomendado para pruebas locales)
+-----------------------------------------------
+
+1) Construir y ejecutar con docker-compose:
+
+   sudo docker-compose up -d --build
+
+2) Verificar contenedor y logs:
+
+   sudo docker ps
+   sudo docker logs -f nuevo_proyecto-sistema_analitico-1
+
+3) Acceder a la interfaz web en:
+
+   http://localhost:8501
+
+Persistencia local (artifacts):
+
+   El volumen `./artifacts` se monta dentro del contenedor en `/app/artifacts`.
+
+CI / Publicación de imagen:
+
+ - El workflow de GitHub Actions en `.github/workflows/ci.yml` ejecuta tests y,
+   en la rama `main`, construye y publica la imagen a Docker Hub si existen los
+   secretos `DOCKERHUB_USERNAME` y `DOCKERHUB_TOKEN` en el repositorio.
+
+Notas de seguridad y producción:
+
+ - Esta es una demo. No use las credenciales ni el sistema de auth en producción
+   sin revisiones de seguridad.
+ - Para producción considere añadir un reverse-proxy (nginx/Caddy) y TLS.
+

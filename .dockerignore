@@ -1,0 +1,14 @@
+.git
+.gitignore
+.venv
+venv
+__pycache__
+*.pyc
+artifacts/hf_cache
+artifacts/*.npz
+artifacts/*.pt
+artifacts/*.npy
+node_modules
+tests
+.github
+README.md

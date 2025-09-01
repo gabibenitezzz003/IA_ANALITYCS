@@ -1,0 +1,10 @@
+# Caddy reverse proxy: serve the Streamlit app and provide automatic TLS (if public domain)
+http://localhost {
+    reverse_proxy sistema_analitico:8501
+}
+# Caddy reverse proxy - routes local hostnames to the Streamlit app
+# For local testing: add an entry to /etc/hosts like 127.0.0.1 demo.local
+
+:80 {
+    reverse_proxy / http://sistema_analitico:8501
+}
